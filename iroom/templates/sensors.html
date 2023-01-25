@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block head %}
+	{% if session.logged_in %}  
+   
+    <script type="text/javascript">
+		var sse = new EventSource("/update_sensor");
+    	sse.onmessage = function(event) {
+    		var sensor = event.data;
+    		obj = JSON.parse(sensor)
+    	  	if (obj.tipo == 'temperatura') {
+           		document.getElementById('ct').innerHTML = "Temperatura: "+obj.valor;
+                    document.getElementById('temperatura').setAttribute('value', obj.valor);
+                    if (obj.value >= 20) {
+                        document.getElementById('AlTemp').innerHTML == "Aviso temperatura";
+                    }
+        	};
+        	if (obj.tipo == 'humedad') {
+           		document.getElementById('ch').innerHTML = "Humedad: "+obj.valor;
+        	 	document.getElementById('humedad').setAttribute('value', obj.valor);
+        	};
+        	if (obj.tipo == 'luz') {
+				    document.getElementById('cl').innerHTML = "Nivel de Luz: "+obj.valor;
+        	 	document.getElementById('luz').setAttribute('value', obj.valor);
+        	};
+        	if (obj.tipo == 'sonido') {
+           		document.getElementById('cs').innerHTML = "Nivel de sonido: "+obj.valor;
+        	 	document.getElementById('sonido').setAttribute('value', obj.valor);
+        	};
+        	if (obj.tipo == 'movimiento') {
+           		document.getElementById('cm').innerHTML = "Movimiento: " + obj.valor;
+        	 	document.getElementById('movimiento').setAttribute('value', obj.valor);
+        	};
+    	};
+    
+	</script>
+  {% endif%}
+{% endblock %}
+{% block body %}
+
+  {% if session.logged_in %}
+    <div id="sensores">
+    <h2>Sensores</h2>
+  		 <div id="ct"></div> <meter id="temperatura" value="0" min="0" max="50" low="18" high="26"></meter> 
+         <span id="AlTemp"></span>
+  		 <div id="ch"></div> <meter id="humedad" value="0" min="0" max="100" low="18" high="26"></meter> 
+  		 <div id="cl"></div> <meter id="luz" value="0" min="0" max="100" low="18" high="26"></meter> 
+  		 <div id="cs"></div> <meter id="sonido" value="0" min="0" max="100" low="18" high="26"></meter> 
+  		 <div id="cm"></div> <meter id="movimiento" value="0" min="0" max="1" low="0" high="1"></meter> 
+   </div>
+ 
+  
+  {% endif%}	   
+{% endblock %}

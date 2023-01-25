@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+{% block head %}
+	
+{% endblock %}
+{% block body %}
+{% if session.logged_in %}
+  
+<div id="acortador">
+    <center><h2>Acortador URL</h2></center>
+
+    <script type=text/javascript>
+        $(function () {
+            $(".button").click(function () {
+                $.ajax({
+                    type: "GET",
+                    url: "/enviarurl",
+                    contentType: "application/json; charset=utf-8",
+                    data: { url: $('input[id="acor"]').val(), },
+                    success: function (data) {
+                    }
+                });
+            });
+        });
+
+
+    </script>
+    <div id="result"></div>
+    <p> Inserta la URL para acortar. Recuerda añadir https:// al inicio: </p>
+    <input id="acor" type="url" placeholder="https://" /></input> <button class="button" onclick="envioURL()" id="boton">Enviar</button>
+    <span id="OK"></span>
+</div>	
+  {% endif%}	   
+{% endblock %}
